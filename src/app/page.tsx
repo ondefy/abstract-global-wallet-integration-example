@@ -7,8 +7,7 @@ import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wa
 import { getGeneralPaymasterInput } from "viem/zksync";
 import { parseAbi, encodeAbiParameters, getAbiItem, encodeFunctionData } from "viem";
 
-// 1. Create a working example here
-// 2. Create a new repo for agw wallet integration - What
+
 export default function Home() {
     const { login, logout } = useLoginWithAbstract();
     const { address, status } = useAccount();
@@ -17,14 +16,14 @@ export default function Home() {
     const { data: transactionReceipt } = useWaitForTransactionReceipt({
         hash: transactionHash,
     });
-    const callZyfiApi = async (from, to, calldata, value, sponsorshipRatio) => {
+    const callZyfiApi = async (from: any, to: string, calldata: string, value: string, sponsorshipRatio: number) => {
         try {
-            // Définir le payload pour l'API
+            // API Payload
             const payload = {
                 // feeTokenAddress: tokenAddress,
                 sponsorshipRatio: 100,
                 chainId: 11124,
-                replayLimit: 5,
+                    replayLimit: 5,
                 txData: {
                     from,
                     to,
@@ -32,13 +31,15 @@ export default function Home() {
                     value,
                 },
             };
+            console.log ('API payload', payload)
 
-            // Effectuer la requête POST à l'API
+
+            // API answer
             const response = await fetch("https://api.zyfi.org/api/erc20_sponsored_paymaster/v1", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-API-Key": `${process.env.NEXT_PUBLIC_ZYFI_API_KEY}`, // Remplacez par votre clé API
+                    "X-API-Key": `${process.env.NEXT_PUBLIC_ZYFI_API_KEY}`, // Replace by your API Key
                 },
                 body: JSON.stringify(payload),
             });
